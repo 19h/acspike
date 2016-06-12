@@ -1,0 +1,27 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    {{> header}}
+    <body>
+        {{> topBanner}}
+        <div class="row column">
+            <hr>
+        </div>
+        <div class="row column">
+            <p class="lead">Current Auctions</p>
+        </div>
+        <div class="row small-up-1 medium-up-2 large-up-3">
+            {{#each activeAuctions}}
+                <div class="column">
+                    <a href="/auction/{{id}}">
+                        <div class="callout">
+                            <p><img src="{{item.image}}" alt="image of a planet called Pegasi B"/></p>
+                            <p class="lead">{{item.title}}</p>
+                            <p class="subheader">{{item.description}}</p>
+                        </div>
+                    </a>
+                </div>
+            {{/each}}
+        </div>
+        {{> footer}}
+    </body>
+</html>

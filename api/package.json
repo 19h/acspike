@@ -1,0 +1,35 @@
+{
+  "name": "f2-gql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/",
+    "debug": "./node_modules/.bin/babel-node --debug --presets es2015,stage-3 --experimental -- server/server.js --debug"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqp": "^0.2.6",
+    "bluebird": "^3.4.0",
+    "body-parser": "^1.15.1",
+    "bunyan": "^1.8.1",
+    "chai": "^3.5.0",
+    "chai-shallow-deep-equal": "^1.4.0",
+    "express": "^4.13.4",
+    "express-graphql": "^0.5.3",
+    "graphql": "^0.6.0",
+    "ioredis": "^2.0.1",
+    "jsdom": "^9.2.1",
+    "jwt-simple": "^0.5.0",
+    "level": "^1.4.0",
+    "level-lru-cache": "^0.1.5",
+    "lodash": "^4.13.1",
+    "mongodb": "^2.1.21",
+    "newrelic": "^1.28.0",
+    "node-etcd": "^4.2.1",
+    "pmx": "^0.6.2"
+  }
+}

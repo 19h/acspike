@@ -1,0 +1,182 @@
+### REDIS FOR BIDS ###
+redis_bids:
+  image: redis
+  hostname: redis_bids
+  container_name: redis_bids
+  volumes:
+    - ./redisdata:/data
+
+### REDIS FOR SESSIONS ###
+redis_sessions:
+  image: redis
+  hostname: redis_sessions
+  container_name: redis_sessions
+  volumes:
+    - ./redisdata:/data
+
+### MONGO ###
+mongo:
+  image: mongo
+  hostname: mongo_api
+  container_name: mongo
+  expose:
+    - "27017"
+  volumes:
+    - ./mongodata:/data/db
+
+############## ------------ RABBIT BIGPIPE --------------
+## Unfiltered messages; neither matched to be the highest big nor enriched
+##
+## Note: This replicates cluster behaviour
+
+rmq_bigpipe:
+  image: harbur/rabbitmq-cluster
+  hostname: rmq_bigpipe
+  environment:
+    - ERLANG_COOKIE=erlang_bigpipe_cookie
+  volumes:
+    - ./rmq_bigpipe_logs:/data/log
+    - ./rmq_bigpipe_data:/data/mnesia
+
+rmq_bigpipe_2:
+  image: harbur/rabbitmq-cluster
+  hostname: rmq_bigpipe_2
+  links:
+    - rmq_bigpipe
+  environment:
+    - ERLANG_COOKIE=erlang_bigpipe_cookie
+    - CLUSTER_WITH=rmq_bigpipe
+    - ENABLE_RAM=true
+    - RAM_NODE=true
+
+rmq_bigpipe_3:
+  image: harbur/rabbitmq-cluster
+  hostname: rmq_bigpipe_3
+  links:
+    - rmq_bigpipe
+    - rmq_bigpipe_2
+  environment:
+    - ERLANG_COOKIE=erlang_bigpipe_cookie
+    - CLUSTER_WITH=rmq_bigpipe
+
+############## ------------ RABBIT SMALLPIPE --------------
+## Filtered messages
+
+#rmq_smallpipe:
+#  image: harbur/rabbitmq-cluster
+#  hostname: rmq_smallpipe
+#  environment:
+#    - ERLANG_COOKIE=erlang_smallpipe_cookie
+#  ports:
+#    - "5672:5672"
+#    - "15672:15672"
+#  volumes:
+#    - ./rmq_smallpipe_logs:/data/log
+#    - ./rmq_smallpipe_data:/data/mnesia
+#
+#rmq_smallpipe_2:
+#  image: harbur/rabbitmq-cluster
+#  hostname: rmq_smallpipe_2
+#  links:
+#    - rmq_smallpipe
+#  environment:
+#    - ERLANG_COOKIE=erlang_smallpipe_cookie
+#    - CLUSTER_WITH=rmq_smallpipe
+#    - ENABLE_RAM=true
+#    - RAM_NODE=true
+#  ports:
+#    - "5673:5672"
+#    - "15673:15672"
+#
+#rmq_smallpipe_3:
+#  image: harbur/rabbitmq-cluster
+#  hostname: rmq_smallpipe_3
+#  links:
+#    - rmq_smallpipe
+#    - rmq_smallpipe_2
+#  environment:
+#    - ERLANG_COOKIE=erlang_smallpipe_cookie
+#    - CLUSTER_WITH=rmq_smallpipe
+#  ports:
+#    - "5674:5672"
+
+############## ------------ RABBIT BACKPIPE --------------
+## Enriched filtered messages
+
+#rmq_backpipe:
+#  image: harbur/rabbitmq-cluster
+#  hostname: rmq_backpipe
+#  environment:
+#    - ERLANG_COOKIE=erlang_backpipe_cookie
+#  ports:
+#    - "5672:5672"
+#    - "15672:15672"
+#  volumes:
+#    - ./rmq_backpipe_logs:/data/log
+#    - ./rmq_backpipe_data:/data/mnesia
+#
+#rmq_backpipe_2:
+#  image: harbur/rabbitmq-cluster
+#  hostname: rmq_backpipe_2
+#  links:
+#    - rmq_backpipe
+#  environment:
+#    - ERLANG_COOKIE=erlang_backpipe_cookie
+#    - CLUSTER_WITH=rmq_backpipe
+#    - ENABLE_RAM=true
+#    - RAM_NODE=true
+#  ports:
+#    - "5673:5672"
+#    - "15673:15672"
+#
+#rmq_backpipe_3:
+#  image: harbur/rabbitmq-cluster
+#  hostname: rmq_backpipe_3
+#  links:
+#    - rmq_backpipe
+#    - rmq_backpipe_2
+#  environment:
+#    - ERLANG_COOKIE=erlang_backpipe_cookie
+#    - CLUSTER_WITH=rmq_backpipe
+#  ports:
+#    - "5674:5672"
+
+### bids ###
+## Note: Will receive messages from web over bigpipe and publish over smallpipe
+bids:
+  build: ./
+  container_name: bids
+  links:
+    - redis_bids
+    - rmq_bigpipe
+#    - rmq_smallpipe
+  volumes:
+    - ./bids:/opt/app
+
+### api ###
+api:
+  build: ./
+  hostname: api
+  container_name: api
+  links:
+    - redis_bids
+    - mongo
+    - rmq_bigpipe
+#    - rmq_smallpipe
+  expose:
+    - "2001"
+  volumes:
+    - ./api:/opt/app
+
+### web ###
+web:
+  build: ./
+  container_name: web
+  links:
+    - api
+    - redis_sessions
+    - rmq_bigpipe
+  ports:
+    - "9000:2000"
+  volumes:
+    - ./web:/opt/app

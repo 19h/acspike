@@ -1,0 +1,26 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    {{> header}}
+    <body>
+        {{> topBanner}}
+        <div class="row column">
+            <hr>
+        </div>
+        <div class="row">
+            <div class="medium-6 columns auctionFlex">
+                <div class="auctionHero thumbnail" style="background-image: url({{item.image}});"></div>
+                <div class="auction-bid-flex">
+                    <div class="auction-bid-put">
+                        <a class="button large expanded submit-bid">bid $1000</a>
+                    </div>
+                    {{> bidStatus}}
+                </div>
+            </div>
+            <div class="medium-6 large-5 columns">
+                <h3>{{item.title}}</h3>
+                <p>{{item.description}}</p>
+            </div>
+        </div>
+        {{> footer}}
+    </body>
+</html>

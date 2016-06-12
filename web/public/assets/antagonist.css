@@ -1,0 +1,68 @@
+body div.auctionFlex {
+	display: flex;
+	flex-flow: column wrap;
+}
+
+body div.auctionHero {
+	background-position: 50% 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+	width: 100%;
+	height: 278px;
+}
+
+body input.user-login, body input.user-register {
+	width: 150px !important;
+}
+
+body div.user-welcome {
+    display: block;
+    padding: .7rem 1rem;
+    line-height: 1;
+}
+
+body .auctionFlex .auction-bid-flex {
+	display: flex;
+
+	margin: 0 0 1rem 0;
+}
+
+body .auctionFlex .auction-bid-flex a {
+	margin: 0;
+}
+
+body .auctionFlex .auction-bid-flex > div {
+	align-self: center;
+}
+
+body .auctionFlex .auction-bid-flex > div.auction-bid-put {
+	flex: 3;
+}
+
+div.auction-bid-status {
+	flex: 1;
+    display: flex;
+}
+
+div.auction-bid-status .current-bid-avatar img {
+	height: 56px;
+	width: 56px;
+}
+
+div.auction-bid-status .current-bid {
+	flex: 1;
+    flex-flow: column;
+
+    text-align: center;
+}
+
+div.auction-bid-status .current-bid > .current-bid-title {
+	display: block;
+
+	font-size: 12px;
+}
+
+div.auction-bid-status .current-bid > .current-bid-amount {
+	font-weight: 700;
+}

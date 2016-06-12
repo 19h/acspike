@@ -1,0 +1,13 @@
+					<div class="bidStatus auction-bid-status">
+                        <div class="current-bid">
+                            <span class="current-bid-title">current bid</span>
+                            <span class="current-bid-amount">${{highestBid}}</span>
+                        </div>
+                        <div class="current-bid-avatar">
+                        	{{#if highestBidder.avatarUrl}}
+                            <img src="{{highestBidder.avatarUrl}}"/>
+                            {{else}}
+                            <img src="https://r1.apx.pub/hero-avatar.png" alt="Nobody placed a bit yet"/>
+                            {{/if}}
+                        </div>
+                    </div>

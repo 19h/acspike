@@ -1,0 +1,15 @@
+                    {{#if user.username}}
+                        <li>
+                            <div class='user-welcome'>Hey, {{user.username}}</div>
+                        </li>
+                        <li><a class="button logout">Logout</a></li>
+                    {{else}}
+                        <li><a class="register-switch">Register</a></li>
+                        <li>
+                            <input type="text" class='user-login username' placeholder="Username"/>
+                        </li>
+                        <li>
+                            <input type="text" class='user-login password' placeholder="Login"/>
+                        </li>
+                        <li><a class="button login-submit">Login</a></li>
+                    {{/if}}
